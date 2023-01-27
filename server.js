@@ -200,7 +200,8 @@ app.post(
 
     //read document to render in UI
     const docPath = `${workingFolder}/payload.txt`;
-    const document = xssFilters.inHTMLData(fs.readFileSync(docPath, 'utf8'));
+    const unsafeDocument = fs.readFileSync(docPath, 'utf8');
+    const document = xssFilters.inHTMLData(unsafeDocument);
     fs.rmSync(workingFolder, { recursive: true, force: true });
 
     res.status(200).send({
@@ -297,7 +298,8 @@ app.get(
       });
       fileContents.pipe(res);
     } else {
-      let fileContents = xssFilters.inHTMLData(fs.readFileSync(file, 'utf8'));
+      const unsafeContents = fs.readFileSync(file, 'utf8');
+      let fileContents = xssFilters.inHTMLData(unsafeContents);
       const parsedContents = JSON.parse(fileContents);
 
       // execution returned errors
