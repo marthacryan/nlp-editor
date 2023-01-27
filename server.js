@@ -27,7 +27,7 @@ const helmet = require('helmet');
 const { body, checkSchema, validationResult } = require('express-validator');
 
 app.use(cors());
-app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: 'preload' }));
+app.use(helmet.hsts({ maxAge: 31536000, includeSubDomains: true }));
 app.use(fileupload());
 const jsonParser = express.json();
 app.use(jsonParser);
