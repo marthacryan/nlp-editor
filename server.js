@@ -200,13 +200,13 @@ app.post(
 
     //read document to render in UI
     const docPath = `${workingFolder}/payload.txt`;
-    const document = fs.readFileSync(docPath, 'utf8');
+    const document = xssFilters.inHTMLData(fs.readFileSync(docPath, 'utf8'));
     fs.rmSync(workingFolder, { recursive: true, force: true });
 
     res.status(200).send({
       message: 'Execution submitted successfully.',
       id: safeWorkingId, // Stored XSS High
-      document: xssFilters.inHTMLData(document),
+      document: document,
     });
   },
 );
@@ -297,8 +297,8 @@ app.get(
       });
       fileContents.pipe(res);
     } else {
-      let fileContents = fs.readFileSync(file, 'utf8');
-      const parsedContents = JSON.parse(xssFilters.inHTMLData(fileContents));
+      let fileContents = xssFilters.inHTMLData(fs.readFileSync(file, 'utf8'));
+      const parsedContents = JSON.parse(fileContents);
 
       // execution returned errors
       const errorMessage = hasError(parsedContents);
